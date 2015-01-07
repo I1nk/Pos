@@ -174,6 +174,8 @@ void populateSurface( void )
    //var
    Atom *o_atom_surface, *HatomPair;
    Atom *list = list_atom_g;
+   Bond *bond_list = list_bond_g;
+   Angle *angle_list = list_angle_g;
    int index_list[MAX_Y_VALUES] = {0,};
    double list_y_values[MAX_Y_VALUES] = {0.0,};
    int count = 0;
@@ -186,6 +188,13 @@ void populateSurface( void )
    //Change the pointer pos to the first open slot in the array.
    //numAtoms is the number of atoms and not a indexing array value
    list += numAtoms;
+   bond_list += max_bonds;
+   angle_list += max_angles;
+
+   //increase the number of angle types and bond types by 1
+   max_angle_type++;
+   max_atom_types++;
+   max_bond_type++;
 
    //find where the O atoms of the surface are in the atom list
    //Not needed since this is now called in the main function
@@ -257,8 +266,17 @@ void populateSurface( void )
        *the angle type to work. 109 degs is required or somewhere close to this
        *This value
        */
-      
-      
+      HatomPair->x = o_atom_surface->x + 0.25;
+      HatomPair->y = o_atom_surface->y + 0.125;
+      HatomPair->z = o_atom_surface->z + 0.915481752958518;
+
+      //Give the new H atom x y and z coords based on the O atom
+      list->x = o_atom_surface->x + 0.0625;
+      list->y = o_atom_surface->y + 0.945788152138317;
+      list->z = o_atom_surface->z - 0.133455465511114;
+
+      //give the new H atom a type
+      list->type = H_ATOM_SURFACE_POS;
 
 //   } //End of for loop
 } //End of function
