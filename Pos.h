@@ -63,6 +63,7 @@ void FindHAtomSurface(void);
 int findYIndexStart(double*, double*, int*, int*);
 int findXIndex(int, double);
 int FindAtoms(FILE*);
+int CheckOAtomBond(Atom*);
 Atom* FindOAtom(double, double, int*, int, double*);
 Atom* FindHAtomPair(Atom*);
 

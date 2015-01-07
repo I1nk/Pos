@@ -176,6 +176,7 @@ void populateSurface( void )
    Atom *list = list_atom_g;
    Bond *bond_list = list_bond_g;
    Angle *angle_list = list_angle_g;
+   int *pair_list = list_pair_g;
    int index_list[MAX_Y_VALUES] = {0,};
    double list_y_values[MAX_Y_VALUES] = {0.0,};
    int count = 0;
@@ -215,6 +216,7 @@ void populateSurface( void )
    //Do random number generator to find the x and y coord of the O atom to populate
    srand(time(NULL));
    
+      index = 0;
 //   for (index = 0; index < number_of_atoms_to_populate; index++)
 //   {//Start of for loop
    
@@ -234,6 +236,21 @@ void populateSurface( void )
 
       //Find the O atom of the surface to populate
       o_atom_surface = FindOAtom(x, y, index_list, count, list_y_values);
+
+
+      //check to see if this O atom has already RCVD another H atom.
+      //If the O atom already has a H atom attached to it,
+      //The program will try again from start.
+      if(1)
+      {
+         index--;
+         //continue;
+      }
+      else
+      {
+         *pair_list = o_atom_surface->id;
+         pair_list++;
+      }
 
 #ifdef _DEBUG_
       //For debugging only
