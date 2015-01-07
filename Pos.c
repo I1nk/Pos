@@ -296,6 +296,19 @@ void populateSurface( void )
       list->type = H_ATOM_SURFACE_POS;
 
       //Add to the bond list
+      //increase the number of bonds by one
+      max_bonds++;
+
+      //Set the new bond id as the total number of bonds
+      bond_list->id = max_bonds;
+
+      //set the type of the bond 
+      bond_list->type = NEW_BOND_TYPE_H_ATOM_SURFACE;
+
+      //set the two atoms that are bonded together
+      bond_list->atom1 = o_atom_surface->id;
+      bond_list->atom2 = list->id;
+
       //add one to the total number of bonds
 
       //Add to the angle list

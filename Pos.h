@@ -80,6 +80,7 @@ Atom* FindHAtomPair(Atom*);
 #define MAX_X 199.794
 #define BUFFER_SIZE 100
 #define MAX_Y_VALUES 100
+#define NEW_BOND_TYPE_H_ATOM_SURFACE 2
 //#define _DEBUG_
 
 //Globals
