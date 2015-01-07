@@ -68,6 +68,8 @@ Atom* FindOAtom(double, double, int*, int, double*);
 Atom* FindHAtomPair(Atom*);
 
 //Pound defines
+#define TRUE 1
+#define FALSE 0
 #define ERROR_OPENING_FILE -1
 #define O_ATOM_SURFACE 4
 #define H_ATOM_SURFACE 3

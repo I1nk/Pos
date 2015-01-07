@@ -241,7 +241,7 @@ void populateSurface( void )
       //check to see if this O atom has already RCVD another H atom.
       //If the O atom already has a H atom attached to it,
       //The program will try again from start.
-      if(1)
+      if(CheckOAtomBond(o_atom_surface))
       {
          index--;
          //continue;
@@ -304,6 +304,25 @@ void populateSurface( void )
 
 //   } //End of for loop
 } //End of function
+
+
+int CheckOAtomBond(Atom *o_atom)
+{
+
+   //var
+   int* list = list_pair_g;
+
+   while(*list)
+   {
+      if(*list == o_atom->id)
+         return TRUE;
+      //go to the next slot in the array
+      list++;
+   }
+
+   return FALSE;
+
+}
 
 /**
 *  Find the H atom that is bonded with the o_atom_surface varaible in the list.
