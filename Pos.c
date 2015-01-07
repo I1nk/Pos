@@ -278,6 +278,13 @@ void populateSurface( void )
       //give the new H atom a type
       list->type = H_ATOM_SURFACE_POS;
 
+      //Add to the bond list
+      //add one to the total number of bonds
+
+      //Add to the angle list
+      //Add one to the total number of angles
+
+
 //   } //End of for loop
 } //End of function
 
