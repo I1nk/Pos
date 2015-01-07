@@ -600,11 +600,13 @@ int main( void )
    Atom *list_atom = (Atom*) calloc(numAtoms * 2, sizeof(Atom));
    Bond *list_bond = (Bond*) calloc(numAtoms * 2, sizeof(Bond));
    Angle *list_angle = (Angle*) calloc(numAtoms * 2, sizeof(Angle));
+   int *list_pair = (int*) calloc(numAtoms * 2, sizeof(int));
 
    //Set the global pointers up
    list_atom_g = list_atom;
    list_bond_g = list_bond;
    list_angle_g = list_angle;
+   list_pair_g = list_pair;
  
    //Read the input file until the atom list is found
    ReadTill(file_p,"Atoms",5);
@@ -634,11 +636,13 @@ int main( void )
    list_angle_g = NULL;
    list_atom_g = NULL;
    list_bond_g = NULL;
+   list_pair_g = NULL;
 
    //Free the local memory that was set up using calloc
    free(list_bond);
    free(list_angle);
    free(list_atom);
+   free(list_pair);
 
 
    return 0;

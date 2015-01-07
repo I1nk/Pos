@@ -83,6 +83,7 @@ Atom* FindHAtomPair(Atom*);
 Atom *list_atom_g;
 Bond *list_bond_g;
 Angle *list_angle_g;
+int *list_pair_g;
 int numAtoms = 0;
 int max_bonds = 0;
 int max_angles = 0;
