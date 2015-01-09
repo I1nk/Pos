@@ -17,9 +17,11 @@ int FindAtoms(FILE *file_p)
 
    //var
    int output = 0;
+   unsigned char index;
    char string[BUFFER_SIZE] = {0,};
    char *string_p = &string[0];
-   
+   double min, max;
+   char *trash, *trash2;
    //find the number of atoms in the file
    while(!output)
    {
@@ -33,6 +35,50 @@ int FindAtoms(FILE *file_p)
    fgets(string_p, BUFFER_SIZE, file_p);
    max_angles = atoi(string_p);
    
+   //skip over the un-needed information from this section and the break for the
+   //next section
+   for (index = 0; index < 4; index++)
+      fgets(string_p, BUFFER_SIZE, file_p);
+   
+   //convert the number of atom types to a number
+   max_atom_types = atoi(string_p);
+
+   //get the bond types and convert it to a number
+   fgets(string_p, BUFFER_SIZE, file_p);
+   max_bond_type = atoi(string_p);
+
+   //get the angle types and convert it to a number
+   fgets(string_p, BUFFER_SIZE, file_p);
+   max_angle_type = atoi(string_p);
+
+   //skip over the un-needed information
+   for (index = 0; index < 2; index++)
+      fgets(string_p, BUFFER_SIZE, file_p);
+  
+   //get the min and max for the x coord
+   fscanf(file_p, "%lf %lf", &min, &max);
+   _xmin = min;
+   _xmax = max;
+
+   //get rid of the rest of the line
+   fgets(string_p, BUFFER_SIZE, file_p);
+
+   //get the min and max for the y coord
+   fscanf(file_p, "%lf %lf", &min, &max);
+   _ymin = min;
+   _ymax = max;
+
+   //get rid of the rest of the line
+   fgets(string_p, BUFFER_SIZE, file_p);
+
+   //get the min and max for the z coord
+   fscanf(file_p, "%lf %lf", &min, &max);
+   _zmin = min;
+   _zmax = max;
+
+   //get rid of the rest of the line
+   fgets(string_p, BUFFER_SIZE, file_p);
+
    //return the number of atoms in the file
    return output;
 

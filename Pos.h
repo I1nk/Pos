@@ -93,9 +93,9 @@ int *list_pair_g;
 int numAtoms = 0;
 int max_bonds = 0;
 int max_angles = 0;
-int max_atom_types = 3;
-int max_bond_type = 1;
-int max_angle_type = 1;
+int max_atom_types = 0;
+int max_bond_type = 0;
+int max_angle_type = 0;
 int top_O_atoms = 0;
 int start_id_o_atom = 0; //NOTE this is the index value and not the actual id number
 double percentage = 0.25;
