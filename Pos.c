@@ -327,11 +327,28 @@ void populateSurface( void )
 //   } //End of for loop
 } //End of function
 
-void PrintFile(char *Filename)
+void PrintFile(char *filename)
 {
    //vars
+   FILE *fd;
+
+   //Open the file for output
+   fd = fopen(filename,"w");
+
+   //print out three new lines.
+   fprintf(fd, "\n\n\n");
+   
+   //Write how many of each type there is into the file
+   fprintf(fd, "%i atoms\n", numAtoms);
+   fprintf(fd, "%i bonds\n", max_bonds);
+   fprintf(fd, "%i angles\n", max_angles);
+   fprintf(fd, "0 dihedrals\n0 impropers\n\n");
+   
+   //print out how many differant types there are for each type
 
 
+   //close the file
+   fclose(fd);
 
 }
 
