@@ -316,10 +316,24 @@ void populateSurface( void )
       angle_list->id = max_angles;
 
       //Add to the angle list
+      //Updated the angle type to the new one for the surface
       angle_list->type = NEW_ANGLE_TYPE_SURFACE;
+
+      //Added the information for what atoms that make up the angle
+      angle_list->atom1 = HatomPair->id;
+      angle_list->atom2 = o_atom_surface->id;
+      angle_list->atom3 = list->id;
 
 //   } //End of for loop
 } //End of function
+
+void PrintFile(char *Filename)
+{
+   //vars
+
+
+
+}
 
 
 int CheckOAtomBond(Atom *o_atom)

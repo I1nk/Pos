@@ -58,6 +58,7 @@ void populateSurface(void);
 void mapOutYValueOfAtomList(int*, int*);
 void setUpYValueList(int*, int, double*);
 void FindHAtomSurface(void);
+void PrintFile(char*);
 
 //Non void return functions
 int findYIndexStart(double*, double*, int*, int*);
