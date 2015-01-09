@@ -309,11 +309,14 @@ void populateSurface( void )
       bond_list->atom1 = o_atom_surface->id;
       bond_list->atom2 = list->id;
 
-      //add one to the total number of bonds
+      //Add one to the total number of angles
+      max_angles++;
 
       //Add to the angle list
-      //Add one to the total number of angles
+      angle_list->id = max_angles;
 
+      //Add to the angle list
+      angle_list->type = NEW_ANGLE_TYPE_SURFACE;
 
 //   } //End of for loop
 } //End of function
