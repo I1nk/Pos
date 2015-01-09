@@ -267,8 +267,8 @@ void populateSurface( void )
    srand(time(NULL));
    
       index = 0;
-//   for (index = 0; index < number_of_atoms_to_populate; index++)
-//   {//Start of for loop
+   for (index = 0; index < number_of_atoms_to_populate; index++)
+   {//Start of for loop
    
       //Find a random Y value
       random_num = rand();
@@ -377,8 +377,15 @@ void populateSurface( void )
       angle_list->atom2 = o_atom_surface->id;
       angle_list->atom3 = list->id;
 
-      PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
-//   } //End of for loop
+      //move the pointer for each of the array to the next slot
+      list++;
+      angle_list++;
+      bond_list++;
+      //PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
+   } //End of for loop
+      
+   PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
+
 } //End of function
 
 void PrintFile(char *filename)
