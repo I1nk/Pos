@@ -324,6 +324,7 @@ void populateSurface( void )
       angle_list->atom2 = o_atom_surface->id;
       angle_list->atom3 = list->id;
 
+      PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
 //   } //End of for loop
 } //End of function
 
@@ -342,9 +343,21 @@ void PrintFile(char *filename)
    fprintf(fd, "%i atoms\n", numAtoms);
    fprintf(fd, "%i bonds\n", max_bonds);
    fprintf(fd, "%i angles\n", max_angles);
-   fprintf(fd, "0 dihedrals\n0 impropers\n\n");
-   
+   fprintf(fd, "0 dihedrals\n0 impropers\n");
+
+   //print out a new line for the next section
+   fprintf(fd, "\n");
+
    //print out how many differant types there are for each type
+   fprintf(fd, "%i atom types\n", max_atom_types);
+   fprintf(fd, "%i bond types\n", max_bond_type);
+   fprintf(fd, "%i angle types\n", max_angle_type);
+   fprintf(fd,"0 dihedral types\n");
+
+   //print out a new line charater for the next section
+   fprintf(fd, "\n");
+
+   //print out the coord system for the system
 
 
    //close the file
