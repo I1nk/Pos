@@ -21,7 +21,7 @@ int FindAtoms(FILE *file_p)
    char string[BUFFER_SIZE] = {0,};
    char *string_p = &string[0];
    double min, max;
-   char *trash, *trash2;
+   
    //find the number of atoms in the file
    while(!output)
    {
@@ -240,7 +240,11 @@ void populateSurface( void )
 
    //increase the number of angle types and bond types by 1
    max_angle_type++;
-   max_atom_types++;
+   /*reason why it is 2 and not 1 is beacuse we changed the atom type 
+    * of the surface to 4 and the H atom that is being added to the 
+    * file is atom type 5. But we never took care of this till now.
+    */
+   max_atom_types += 2;
    max_bond_type++;
 
    //find where the O atoms of the surface are in the atom list
@@ -319,6 +323,9 @@ void populateSurface( void )
       //Set the new H atom to have the same mol id number as the O/H atom
       list->mol = o_atom_surface->mol;
 
+      //set the new H atom charge
+      list->q = NEW_H_ATOM_Q;
+
       //increase the number of atoms by one since we are adding one H atom
       numAtoms++;
 
@@ -378,6 +385,10 @@ void PrintFile(char *filename)
 {
    //vars
    FILE *fd;
+   int index;
+   Atom *list = list_atom_g;
+   Bond *list_bond = list_bond_g;
+   Angle *list_angle = list_angle_g;
 
    //Open the file for output
    fd = fopen(filename,"w");
@@ -404,7 +415,80 @@ void PrintFile(char *filename)
    fprintf(fd, "\n");
 
    //print out the coord system for the system
+   fprintf(fd, "%10.4lf\t%10.4lf\txmin xmax\n", _xmin, _xmax);
+   fprintf(fd, "%10.4lf\t%10.4lf\tymin ymax\n", _ymin, _ymax);
+   fprintf(fd, "%10.4lf\t%10.4lf\tzmin zmax\n", _zmin, _zmax);
 
+   //print out a new line charater for the next section
+   fprintf(fd, "\n");
+
+   //Print out the masses information 
+   fprintf(fd, "Masses\n\n");
+   fprintf(fd, "1 26.981540\n2 15.994915\n3 1.007825\n");
+   fprintf(fd, "4 15.994915\n5 1.007825\n");
+
+   //print out a new line charater for the next section
+   fprintf(fd, "\n");
+
+   //Print out the Bond coeffs information
+   fprintf(fd, "Bond Coeffs\n\n");
+   fprintf(fd, "1 554.1349 1.0\n");
+   fprintf(fd, BOND_COEFF_NEW_BONE);
+   fprintf(fd,"\n");
+
+   //print out a new line charater for the next section
+   fprintf(fd, "\n");
+
+   //print out the angle coeffs information
+   fprintf(fd, "Angle Coeffs\n\n");
+   fprintf(fd, "1 30.0 109.47\n");
+   fprintf(fd, ANGLE_COEFF_NEW_ANGLE);
+   fprintf(fd, "\n");
+
+   //print out a new line charater for the next section
+   fprintf(fd, "\n\n\n");
+
+   //print out the atoms section of the file
+   fprintf(fd, "Atoms\n\n");
+
+   //print out the information about the atoms
+   for (index = 0; index < numAtoms; index++, list++)
+   {
+      fprintf(fd, "%8i %i %i %8.5lf %12.8lf %12.8lf %12.8lf %i %i %i\n",\
+         list->id, list->type, list->mol, list->q, list->x, list->y,\
+         list->z, list->ix, list->iy, list->iz);
+   }
+
+   //Print out a new line charater for the next section
+   fprintf(fd, "\n\n");
+
+   //Start the bond list
+   fprintf(fd, "Bonds\n\n");
+
+   //print out the bond list
+   for (index = 0; index < max_bonds; index++, list_bond++)
+   {
+      fprintf(fd, "%i %i %i %i\n", \
+         list_bond->id, list_bond->type, list_bond->atom1,\
+         list_bond->atom2);
+   }
+
+   //print put a new line charater for the next section
+   fprintf(fd, "\n\n");
+
+   //Start the Angle list printing
+   fprintf(fd, "Angles\n\n");
+
+   //print out the angle list to file
+   for (index = 0; index < max_angles; index++, list_angle++)
+   {
+      fprintf(fd, "%i %i %i %i %i\n",\
+         list_angle->id, list_angle->type, list_angle->atom1,\
+         list_angle->atom2, list_angle->atom3);
+   }
+   
+   //Print out a new line to end the file
+   fprintf(fd, "\n");
 
    //close the file
    fclose(fd);
@@ -785,7 +869,6 @@ int main( void )
    free(list_angle);
    free(list_atom);
    free(list_pair);
-
 
    return 0;
 }

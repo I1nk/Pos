@@ -83,6 +83,9 @@ Atom* FindHAtomPair(Atom*);
 #define MAX_Y_VALUES 100
 #define NEW_BOND_TYPE_H_ATOM_SURFACE 2
 #define NEW_ANGLE_TYPE_SURFACE 2
+#define BOND_COEFF_NEW_BONE "2 554.1349 1.0"
+#define ANGLE_COEFF_NEW_ANGLE "2 30.0 109.47"
+#define NEW_H_ATOM_Q 1.0
 //#define _DEBUG_
 
 //Globals
