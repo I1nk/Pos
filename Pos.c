@@ -5,7 +5,14 @@
 #warning debug enabled
 #endif
 
+//Produce a warning if _Plot_X is defined since this code is not required to run since
+//it is only used to see where the random number generator places the atoms at.
+#ifdef _Plot_X
+#warning ploting data that is used only on testing the code
+#endif
+
 /*
+ * NOTES: that were used for this code
  * srand (time(NULL)); init the randdom number gen
  * int a = rand(); 
  * Max rand number == RAND_MAX
@@ -229,8 +236,11 @@ void populateSurface( void )
    double x,y;
    const double RANDOM_MAX_VALUE_D = (double) RAND_MAX;
    int random_num, index;
-   double percentage_populated = 0.5;
-   int number_of_atoms_to_populate = top_O_atoms * percentage_populated;
+   int number_of_atoms_to_populate = top_O_atoms * percentage_g;
+
+#ifdef _PLOT_X
+   Dist *list_dist = list_dist_g;
+#endif
 
    //Change the pointer pos to the first open slot in the array.
    //numAtoms is the number of atoms and not a indexing array value
@@ -273,12 +283,12 @@ void populateSurface( void )
       //Find a random Y value
       random_num = rand();
       y = (double) random_num / RANDOM_MAX_VALUE_D;
-      y *= MAX_Y;
+      y *= _ymax;
    
       //Find a random X value
       random_num = rand();
       x = (double) random_num / RANDOM_MAX_VALUE_D;
-      x *= MAX_X;
+      x *= _xmax;
 
 #ifdef _DEBUG_
       printf("Random Values X: %lf and y: %lf\n",x,y);
@@ -345,6 +355,16 @@ void populateSurface( void )
       list->y = o_atom_surface->y + 0.945788152138317;
       list->z = o_atom_surface->z - 0.133455465511114;
 
+
+#ifdef _PLOT_X
+
+      list_dist->x = o_atom_surface->x;
+      list_dist->y = o_atom_surface->y;
+      list_dist->z = o_atom_surface->z;
+      list_dist++;
+
+#endif
+
       //give the new H atom a type
       list->type = H_ATOM_SURFACE_POS;
 
@@ -384,9 +404,33 @@ void populateSurface( void )
       //PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
    } //End of for loop
       
-   PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
+   //PrintFile("/home/I1nk/Code/Pos_surface/Hello.txt");
+   
+   PrintFile(output_file_name);
 
 } //End of function
+
+void PrintPlot(char *filename)
+{
+#ifdef _PLOT_X
+   FILE *fd;
+   Dist *list = list_dist_g;
+
+   //Open the file for output
+   fd = fopen(filename,"w");
+   
+   //print the data to file in two col 
+   //format X Y
+   while(list->z != 0)
+   {
+      fprintf(fd,"%15.8lf %15.8lf\n", list->x, list->y);
+      list++;
+   }
+
+   //close the file
+   fclose(fd);
+#endif
+}
 
 void PrintFile(char *filename)
 {
@@ -422,9 +466,9 @@ void PrintFile(char *filename)
    fprintf(fd, "\n");
 
    //print out the coord system for the system
-   fprintf(fd, "%10.4lf\t%10.4lf\txmin xmax\n", _xmin, _xmax);
-   fprintf(fd, "%10.4lf\t%10.4lf\tymin ymax\n", _ymin, _ymax);
-   fprintf(fd, "%10.4lf\t%10.4lf\tzmin zmax\n", _zmin, _zmax);
+   fprintf(fd, "%10.4lf\t%10.4lf\txlo xhi\n", _xmin, _xmax);
+   fprintf(fd, "%10.4lf\t%10.4lf\tylo yhi\n", _ymin, _ymax);
+   fprintf(fd, "%10.4lf\t%10.4lf\tzlo zhi\n", _zmin, _zmax);
 
    //print out a new line charater for the next section
    fprintf(fd, "\n");
@@ -462,7 +506,7 @@ void PrintFile(char *filename)
    for (index = 0; index < numAtoms; index++, list++)
    {
       fprintf(fd, "%8i %i %i %8.5lf %12.8lf %12.8lf %12.8lf %i %i %i\n",\
-         list->id, list->type, list->mol, list->q, list->x, list->y,\
+         list->id, list->mol, list->type, list->q, list->x, list->y,\
          list->z, list->ix, list->iy, list->iz);
    }
 
@@ -549,7 +593,7 @@ void setUpYValueList(int *index_list, int count, double *list_y_values)
    Atom* atom_list = list_atom_g;
   
    for (index = 0; index < count; index++)
-   {
+   {    
       //Find the next index of the atom list 
       index2 = start_id_o_atom + index_list[index];
 
@@ -811,11 +855,34 @@ void findMinMaxOAtom(int *input, double y)
 /**
 * Main function for the H bonding file.
 */
-int main( void )
+int main(int argc, char* argv[] )
 {
 
+   //check to see if all arguments are present. There should be 3 arguments and no more or less
+   if((argc != 4) || (argc > 4))
+   {
+      puts("\n\nNot enough arguments. Or too many arguments\n");
+      puts("Usage: This script takes in three arguments.\n\
+Input File Name, percentage the surface should be corvered with \
+positive charges from an extra H atom (Should be less than 1), and Output File name\n\
+Example: ./pos.out /home/link/input.dat 0.5 /home/link/output.dat\n\n");
+      return 0;
+   }
+
+   //set the input and output file names
+   input_file_name = argv[1];
+   output_file_name = argv[3];
+   percentage_g = atof(argv[2]);
+
+   //check to see if percentage is less than 1 or grater than 0
+   if ((percentage_g >= 1) || (percentage_g <= 0))
+   {
+      puts("\n\nPercentage must be less than 1 and greater than 0\n\n");
+      return 0;
+   }
+
    //The input file name
-   char *filename = "/home/I1nk/NewSurface/List.dat";
+   char *filename = input_file_name;//"/home/I1nk/NewSurface/List.dat";
    
    //Open the file to be a read only
    FILE *file_p = fopen(filename,"r");
@@ -835,6 +902,11 @@ int main( void )
    Angle *list_angle = (Angle*) calloc(numAtoms * 2, sizeof(Angle));
    int *list_pair = (int*) calloc(numAtoms * 2, sizeof(int));
 
+#ifdef _PLOT_X
+   Dist *list_dist = (Dist*) calloc(numAtoms * 2, sizeof(Dist));
+   list_dist_g = list_dist;
+#endif
+
    //Set the global pointers up
    list_atom_g = list_atom;
    list_bond_g = list_bond;
@@ -847,7 +919,7 @@ int main( void )
    //Read the atoms data and save it to memory
    ReadAtoms(file_p);
    
-   //Read the file until Bonds are found
+   //Read the file until Bonds are found 
    ReadTill(file_p,"Bonds",5);
 
    //Read the Bonds data and save it to memory
@@ -865,6 +937,10 @@ int main( void )
    //Populate the surface with an extra H atom to make the surface positve
    populateSurface();
    
+#ifdef _PLOT_X   
+   PrintPlot("/home/I1nk/Dist.txt");
+#endif
+
    //Clean the memory
    list_angle_g = NULL;
    list_atom_g = NULL;

@@ -25,6 +25,15 @@ typedef struct ATOMS
 
 }Atom;
 
+typedef struct DIST
+{
+
+   double x;
+   double y;
+   double z;
+
+} Dist;
+
 typedef struct BONDS
 {
 
@@ -59,6 +68,8 @@ void mapOutYValueOfAtomList(int*, int*);
 void setUpYValueList(int*, int, double*);
 void FindHAtomSurface(void);
 void PrintFile(char*);
+void PrintPlot(char*); //To print the dist list
+
 
 //Non void return functions
 int findYIndexStart(double*, double*, int*, int*);
@@ -86,12 +97,16 @@ Atom* FindHAtomPair(Atom*);
 #define BOND_COEFF_NEW_BONE "2 554.1349 1.0"
 #define ANGLE_COEFF_NEW_ANGLE "2 30.0 109.47"
 #define NEW_H_ATOM_Q 1.0
+//#define _PLOT_X
 //#define _DEBUG_
 
 //Globals
 Atom *list_atom_g;
 Bond *list_bond_g;
 Angle *list_angle_g;
+#ifdef _PLOT_X
+Dist *list_dist_g;
+#endif
 int *list_pair_g;
 int numAtoms = 0;
 int max_bonds = 0;
@@ -101,7 +116,7 @@ int max_bond_type = 0;
 int max_angle_type = 0;
 int top_O_atoms = 0;
 int start_id_o_atom = 0; //NOTE this is the index value and not the actual id number
-double percentage = 0.25;
+double percentage_g = 0.25;
 double _xmin = 0;
 double _xmax = 0;
 double _ymin = 0;
@@ -109,6 +124,7 @@ double _ymax = 0;
 double _zmin = 0;
 double _zmax = 0;
 int h_surface_index = 0;
-
+char *input_file_name;
+char *output_file_name;
 
 #endif
